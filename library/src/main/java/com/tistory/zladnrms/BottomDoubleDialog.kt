@@ -18,12 +18,11 @@ import defy.tech.testdialog.data.BottomSingleActionItem
 import defy.tech.testdialog.data.CenterSingleActionItem
 import defy.tech.testdialog.data.DialogItem
 
-class ClimaxDialog constructor(context: Context) : Dialog(context), View.OnClickListener {
+class BottomDoubleDialog constructor(context: Context) : Dialog(context), View.OnClickListener {
 
     private val layoutDialog: NestedRoundableLayout by lazy {
         this.findViewById(R.id.layout_dialog) as NestedRoundableLayout
     }
-
     private val layoutTitleBar: LinearLayout by lazy {
         this.findViewById(R.id.layout_title_bar) as LinearLayout
     }
@@ -42,35 +41,18 @@ class ClimaxDialog constructor(context: Context) : Dialog(context), View.OnClick
     private val layoutRightAction: LinearLayout by lazy {
         this.findViewById(R.id.layout_right_action) as LinearLayout
     }
-    private val labelCenterAction: TextView by lazy {
-        this.findViewById(R.id.label_center_action) as TextView
-    }
     private val labelLeftAction: TextView by lazy {
         this.findViewById(R.id.label_left_action) as TextView
     }
     private val labelRightAction: TextView by lazy {
         this.findViewById(R.id.label_right_action) as TextView
     }
-    private val layoutBottomOnlyAction: LinearLayout by lazy {
-        this.findViewById(R.id.layout_bottom_only_action) as LinearLayout
-    }
-    private val labelBottomOnlyAction: TextView by lazy {
-        this.findViewById(R.id.label_bottom_only_action) as TextView
-    }
 
-    private var mLeftActionListener: CoolDialogClickListener? = null
-    private var mRightActionListener: CoolDialogClickListener? = null
-    private var mBottomOnlyActionListener: CoolDialogClickListener? = null
-    private var mCenterActionListener: CoolDialogClickListener? = null
+    private var mLeftActionListener: ClimaxDialogListener? = null
+    private var mRightActionListener: ClimaxDialogListener? = null
 
-    private val dialogItem: DialogItem = DialogItem()
-    private var bLRI: BottomLeftRightActionItem? = null
-    private var bSAI: BottomSingleActionItem? = null
-    private var cSAI: CenterSingleActionItem? = null
-
-    var hasBottomSingleAction = false
-    var hasBottomAction = false
-    var hasCenterSingleAction = false
+    private val dialogItem = DialogItem()
+    private var bLRI = BottomLeftRightActionItem()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -78,26 +60,12 @@ class ClimaxDialog constructor(context: Context) : Dialog(context), View.OnClick
         window?.attributes!!.windowAnimations = R.style.DialogAnimation
         setCancelable(true)
         super.onCreate(savedInstanceState)
-        Log.d("온크", "생성됨1")
-        setContentView(R.layout.layout_climax_dialog)
+        setContentView(R.layout.layout_bottom_double_dialog)
 
-        controlVisibility()
-        Log.d("온크", "생성됨2")
+        layoutLeftAction.setOnClickListener(this@BottomDoubleDialog)
+        layoutRightAction.setOnClickListener(this@BottomDoubleDialog)
+
         setDataIntoView()
-
-        layoutLeftAction.setOnClickListener(this@ClimaxDialog)
-        layoutRightAction.setOnClickListener(this@ClimaxDialog)
-        labelCenterAction.setOnClickListener(this@ClimaxDialog)
-        layoutBottomOnlyAction.setOnClickListener(this@ClimaxDialog)
-    }
-
-    private fun controlVisibility() {
-        if(hasBottomAction)
-            bLRI = BottomLeftRightActionItem()
-        if(hasBottomSingleAction)
-            bSAI = BottomSingleActionItem()
-        if(hasCenterSingleAction)
-            cSAI = CenterSingleActionItem()
     }
 
     private fun setDataIntoView() {
@@ -150,7 +118,7 @@ class ClimaxDialog constructor(context: Context) : Dialog(context), View.OnClick
             }
         }
 
-        bLRI?.run {
+        bLRI.apply {
             layoutLeftAction.visibility = View.VISIBLE
             layoutRightAction.visibility = View.VISIBLE
 
@@ -192,96 +160,34 @@ class ClimaxDialog constructor(context: Context) : Dialog(context), View.OnClick
             }
 
         }
-
-        bSAI?.run {
-            backgroundColor?.let {
-
-            }
-            text?.let { text ->
-                labelRightAction.text = text
-            }
-            textColor?.let{color ->
-                labelRightAction.setTextColor(Color.parseColor(color))
-            }
-            textGravity?.let { gravity ->
-                labelRightAction.gravity = gravity
-            }
-            textSize?.let { size ->
-                labelRightAction.setTextSize(TypedValue.COMPLEX_UNIT_SP, size)
-            }
-            textFont?.let { font ->
-                Typeface.createFromAsset(context.assets, font).apply { labelRightAction.typeface = this }
-            }
-        }
-
-        cSAI?.run {
-            backgroundColor?.let {
-
-            }
-            text?.let { text ->
-                labelRightAction.text = text
-            }
-            textColor?.let{color ->
-                labelRightAction.setTextColor(Color.parseColor(color))
-            }
-            textGravity?.let { gravity ->
-                labelRightAction.gravity = gravity
-            }
-            textSize?.let { size ->
-                labelRightAction.setTextSize(TypedValue.COMPLEX_UNIT_SP, size)
-            }
-            textFont?.let { font ->
-                Typeface.createFromAsset(context.assets, font).apply { labelRightAction.typeface = this }
-            }
-        }
     }
 
-    interface CoolDialogClickListener {
-        fun onClick(climaxDialog: ClimaxDialog)
+    interface ClimaxDialogListener {
+        fun onClick(climaxDialog: BottomDoubleDialog)
     }
 
     override fun onClick(view: View) {
         when(view.id) {
             R.id.layout_left_action -> {
                 mLeftActionListener?.let {
-                    it.onClick(this@ClimaxDialog)
+                    it.onClick(this@BottomDoubleDialog)
                 }
             }
             R.id.layout_right_action -> {
                 mRightActionListener?.let {
-                    it.onClick(this@ClimaxDialog)
-                }
-            }
-            R.id.label_center_action -> {
-                mCenterActionListener?.let {
-                    it.onClick(this@ClimaxDialog)
-                }
-            }
-            R.id.layout_bottom_only_action -> {
-                mBottomOnlyActionListener?.let {
-                    it.onClick(this@ClimaxDialog)
+                    it.onClick(this@BottomDoubleDialog)
                 }
             }
         }
     }
 
-    fun setLeftActionListener(listener: CoolDialogClickListener): ClimaxDialog {
+    fun setLeftActionListener(listener: ClimaxDialogListener): BottomDoubleDialog {
         mLeftActionListener = listener
         return this
     }
 
-    fun setRightActionListener(listener: CoolDialogClickListener): ClimaxDialog {
+    fun setRightActionListener(listener: ClimaxDialogListener): BottomDoubleDialog {
         mRightActionListener = listener
-        return this
-    }
-
-    fun setCenterActionListener(listener: CoolDialogClickListener): ClimaxDialog {
-        mCenterActionListener = listener
-        return this
-    }
-
-    fun setBottomOnlyActionListener(listener: CoolDialogClickListener): ClimaxDialog {
-        mBottomOnlyActionListener = listener
         return this
     }
 
@@ -332,66 +238,41 @@ class ClimaxDialog constructor(context: Context) : Dialog(context), View.OnClick
 
     // left action text & color, layout color & gravity
     fun setLeftActionBackgroundColor(color: String) {
-        bLRI?.leftBackgroundColor = color
+        bLRI.leftBackgroundColor = color
     }
     fun setLeftActionText(text: String) {
-        bLRI?.leftText = text
+        bLRI.leftText = text
     }
     fun setLeftActionTextColor(color: String) {
-        bLRI?.leftTextColor = color
+        bLRI.leftTextColor = color
     }
     fun setLeftActionTextGravity(gravity: Int) {
-        bLRI?.leftTextGravity = gravity
+        bLRI.leftTextGravity = gravity
     }
     fun setLeftActionSize(size: Float) {
-        bLRI?.leftTextSize = size
+        bLRI.leftTextSize = size
     }
     fun setLeftActionFont(font: String) {
-        bLRI?.leftTextFont = font
+        bLRI.leftTextFont = font
     }
 
     // right action text & color, layout color & gravity
     fun setRightActionBackgroundColor(color: String) {
-        bLRI?.rightBackgroundColor= color
+        bLRI.rightBackgroundColor= color
     }
     fun setRightActionText(text: String) {
-        bLRI?.rightText = text
+        bLRI.rightText = text
     }
     fun setRightActionTextColor(color: String) {
-        bLRI?.rightTextColor = color
+        bLRI.rightTextColor = color
     }
     fun setRightActionTextGravity(gravity: Int) {
-        bLRI?.rightTextGravity = gravity
+        bLRI.rightTextGravity = gravity
     }
     fun setRightActionSize(size: Float) {
-        bLRI?.rightTextSize = size
+        bLRI.rightTextSize = size
     }
     fun setRightActionFont(font: String) {
-        bLRI?.rightTextFont = font
-    }
-
-    // center action text & color, layout color & gravity
-    fun setBottomSingleActionBackgroundColor(color: String) {
-        bSAI?.backgroundColor = color
-    }
-    fun setBottomSingleActionText(text: String) {
-        bSAI?.text = text
-    }
-    fun setBottomSingleActionTextColor(color: String) {
-        bSAI?.textColor = color
-    }
-    fun setBottomSingleActionTextGravity(gravity: Int) {
-        bSAI?.textGravity = gravity
-    }
-    fun setBottomSingleActionSize(size: Float) {
-        bSAI?.textSize = size
-    }
-    fun setBottomSingleActionFont(font: String) {
-        bSAI?.textFont = font
-    }
-
-    private fun Int.dp(px: Float): Int {
-        val scale = context.resources.displayMetrics.density
-        return (px*scale + 0.5f).toInt()
+        bLRI.rightTextFont = font
     }
 }
