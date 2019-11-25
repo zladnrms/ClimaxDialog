@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.tistory.zladnrms.NestedRoundableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.tistory.zladnrms.roundablelayout.RoundableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_dialog"
     android:layout_width="280dp"
@@ -165,4 +165,4 @@
 
     </LinearLayout>
 
-</com.tistory.zladnrms.NestedRoundableLayout>
+</com.tistory.zladnrms.roundablelayout.RoundableLayout>

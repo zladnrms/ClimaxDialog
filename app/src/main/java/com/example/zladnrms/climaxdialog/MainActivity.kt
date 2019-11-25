@@ -40,7 +40,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.button_1_2 -> {
                 BottomSingleDialog(this).apply {
-                    setContentText("")
+                    setTitleBar(true)
+                    setTitle("싱글 버튼")
+                    setContentText("It is your fault ")
                     setActionListener(object: BottomSingleDialog.ClimaxDialogListener {
                         override fun onClick(climaxDialog: BottomSingleDialog) {
                             climaxDialog.dismiss()
